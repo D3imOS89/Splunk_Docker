@@ -1,0 +1,50 @@
+Steps:
+
+1.- create folders to share with docker containes
+
+mkdir data -p 
+
+
+
+2.- create the bash ping file 
+
+vim monitor
+
+#!/bin/bash
+echo Killing Pings!
+pkill ping
+
+echo Pings are dead, mon
+
+echo Pinging
+
+#External host for testing 
+
+ping 8.8.8.8 > ./data/targets/google &
+ping 1.1.1.1 > ./data/targets/cloudfare &
+
+
+
+# Nova Hosts   Internal
+ping 10.251.0.1 > ./data/targets/gateway &
+ping 10.251.0.250 > ./data/targets/masterdns &
+
+echo Process Info:
+pgrep -l ping
+
+3.- start docker splunk 
+
+https://hub.docker.com/r/splunk/splunk
+
+docker run -d -p 8001:8000 -v /root/Splunk_test/data/:/opt/splunk/data -e "SPLUNK_START_ARGS=--accept-license" -e "SPLUNK_PASSWORD=password" --name splunk2 splunk/splunk:latest
+
+3.1 
+
+4.- set up the spunk graphs
+
+ -individualy
+ 
+ source="/opt/splunk/data/targets/google" | timechart avg(time)
+
+ -as group
+  source="/opt/splunk/data/targets/*" | timechart avg(time) by source
