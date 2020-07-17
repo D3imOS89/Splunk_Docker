@@ -2,13 +2,13 @@ Steps:
 
 1.- create folders to share with docker containes
 
-mkdir data -p 
-mkdir data/targets/ -p
+$ mkdir data -p 
+$ mkdir data/targets/ -p
 
 
 2.- create the bash ping file 
 
-vim monitor
+$ vim monitor
 
 #!/bin/bash
 echo Killing Pings!
@@ -32,6 +32,10 @@ ping 10.251.0.250 > ./data/targets/masterdns &
 echo Process Info:
 pgrep -l ping
 
+2.1- make it executable 
+
+$ chmod +x monitor
+
 3.- start docker splunk 
 
 https://hub.docker.com/r/splunk/splunk
@@ -43,8 +47,7 @@ docker run -d -p 8001:8000 -v /root/Splunk_test/data/:/opt/splunk/data -e "SPLUN
 4.- set up the spunk graphs
 
  -individualy
- 
- source="/opt/splunk/data/targets/google" | timechart avg(time)
+   source="/opt/splunk/data/targets/google" | timechart avg(time)
 
  -as group
-  source="/opt/splunk/data/targets/*" | timechart avg(time) by source
+   source="/opt/splunk/data/targets/*" | timechart avg(time) by source
