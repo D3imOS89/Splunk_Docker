@@ -3,7 +3,7 @@ Steps:
 1.- create folders to share with docker containes
 
 mkdir data -p 
-
+mkdir data/targets/ -p
 
 
 2.- create the bash ping file 
